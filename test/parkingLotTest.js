@@ -5,18 +5,25 @@ var chai = require(`chai`),
 var ParkingLotSystem = require(`../main/parkingLotSystem.js`);
 
 describe(`ParkingLotSystem`, () => {
-  //Parking Lot is defined or not
+  let parkingLotSystem;
+  beforeEach(`initset`, () => {
+    parkingLotSystem = new ParkingLotSystem();
+  });
+
+  //UC1- Parking Lot is defined or not
   it(`should exist`, () => {
     expect(ParkingLotSystem).to.not.be.undefined;
   });
-  //UC1- Park the Car
+
+  //Park the Car in Parking Lot
   it(`should return true when given car when parked to catch the flight`, () => {
     let parkingLotSystem = new ParkingLotSystem();
     let car = {};
     let result = parkingLotSystem.park(car);
     assert.equal(result, true);
   });
-  // car is other than object throw exception
+
+  //Car is other than object throw exception
   it(`should throw exception when given car as other then as object`, () => {
     try {
       let parkingLotSystem = new ParkingLotSystem();
