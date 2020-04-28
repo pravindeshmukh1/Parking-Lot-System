@@ -16,7 +16,7 @@ class ParkingLotSystem {
       this.parkingLot.pop(vehicle);
       return true;
     }
-    return false;
+    throw new Error("unknown vehicle");
   }
 }
 module.exports = ParkingLotSystem;
