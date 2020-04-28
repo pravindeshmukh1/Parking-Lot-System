@@ -38,4 +38,13 @@ describe(`ParkingLotSystem`, () => {
     let unparked = parkingLotSystem.unparked(car);
     assert.isTrue(unparked);
   });
+
+  //Unparked the car those are not Parked should return false
+  it(`should return false when unparked the car those not park`, () => {
+    let car = {};
+    parkingLotSystem.park(car);
+    parkingLotSystem.unparked(car);
+    let unparked = parkingLotSystem.unparked(car);
+    assert.isFalse(unparked);
+  });
 });
