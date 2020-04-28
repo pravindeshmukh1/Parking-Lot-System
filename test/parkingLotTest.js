@@ -40,11 +40,15 @@ describe(`ParkingLotSystem`, () => {
   });
 
   //Unparked the car those are not Parked should return false
-  it(`should return false when unparked the car those not park`, () => {
-    let car = {};
-    parkingLotSystem.park(car);
-    parkingLotSystem.unparked(car);
-    let unparked = parkingLotSystem.unparked(car);
-    assert.isFalse(unparked);
+  it(`should return throw exception when unparked the car those not park`, () => {
+    try {
+      let car = {};
+      let car1 = {};
+      parkingLotSystem.park(car);
+      parkingLotSystem.unparked(car);
+      parkingLotSystem.unparked(car1);
+    } catch (e) {
+      assert.equal(e.message, "unknown vehicle");
+    }
   });
 });
