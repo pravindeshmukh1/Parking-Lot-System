@@ -1,6 +1,7 @@
-var chai = require(`chai`);
-var expect = chai.expect;
-var assert = require(`assert`);
+var chai = require(`chai`),
+  expect = chai.expect,
+  should = chai.should,
+  assert = chai.assert;
 var ParkingLotSystem = require(`../main/parkingLotSystem.js`);
 
 describe(`ParkingLotSystem`, () => {
@@ -13,5 +14,11 @@ describe(`ParkingLotSystem`, () => {
     let car = {};
     let result = parkingLotSystem.park(car);
     assert.equal(result, true);
+  });
+  it(`should return false when given car as other then as object`, () => {
+    let parkingLotSystem = new ParkingLotSystem();
+    let car = 0;
+    let result = parkingLotSystem.park(car);
+    assert.isFalse(result);
   });
 });
