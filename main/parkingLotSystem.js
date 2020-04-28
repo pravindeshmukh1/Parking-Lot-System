@@ -10,5 +10,9 @@ class ParkingLotSystem {
     }
     throw new Error("car must be object");
   }
+
+  unparked(vehicle) {
+    return null;
+  }
 }
 module.exports = ParkingLotSystem;
