@@ -12,8 +12,11 @@ class ParkingLotSystem {
   }
 
   unparked(vehicle) {
-    this.parkingLot.pop(vehicle);
-    return true;
+    if (this.parkingLot.includes(vehicle)) {
+      this.parkingLot.pop(vehicle);
+      return true;
+    }
+    return false;
   }
 }
 module.exports = ParkingLotSystem;
