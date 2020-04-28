@@ -5,6 +5,7 @@ var chai = require(`chai`),
 var ParkingLotSystem = require(`../main/parkingLotSystem.js`);
 
 describe(`ParkingLotSystem`, () => {
+  //Parking Lot is defined or not
   it(`should exist`, () => {
     expect(ParkingLotSystem).to.not.be.undefined;
   });
@@ -15,6 +16,7 @@ describe(`ParkingLotSystem`, () => {
     let result = parkingLotSystem.park(car);
     assert.equal(result, true);
   });
+  // check the Car is a Object or not
   it(`should return false when given car as other then as object`, () => {
     let parkingLotSystem = new ParkingLotSystem();
     let car = 0;

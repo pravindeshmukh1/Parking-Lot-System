@@ -4,8 +4,11 @@ class ParkingLotSystem {
   }
 
   park(vehicle) {
-    this.parkingLot.push(vehicle);
-    return true;
+    if (typeof vehicle === "object") {
+      this.parkingLot.push(vehicle);
+      return true;
+    }
+    return false;
   }
 }
 module.exports = ParkingLotSystem;
