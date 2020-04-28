@@ -31,7 +31,7 @@ describe(`ParkingLotSystem`, () => {
     }
   });
 
-  //Unpark the car from Parking Lot
+  //UC2-Unpark the Car from Parking Lot
   it(`should return true when given car when unparked to go to home`, () => {
     let car = {};
     let parked = parkingLotSystem.park(car);

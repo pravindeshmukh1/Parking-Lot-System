@@ -12,7 +12,8 @@ class ParkingLotSystem {
   }
 
   unparked(vehicle) {
-    return null;
+    this.parkingLot.pop(vehicle);
+    return true;
   }
 }
 module.exports = ParkingLotSystem;
