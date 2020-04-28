@@ -16,11 +16,14 @@ describe(`ParkingLotSystem`, () => {
     let result = parkingLotSystem.park(car);
     assert.equal(result, true);
   });
-  // check the Car is a Object or not
-  it(`should return false when given car as other then as object`, () => {
-    let parkingLotSystem = new ParkingLotSystem();
-    let car = 0;
-    let result = parkingLotSystem.park(car);
-    assert.isFalse(result);
+  // car is other than object throw exception
+  it(`should throw exception when given car as other then as object`, () => {
+    try {
+      let parkingLotSystem = new ParkingLotSystem();
+      let car = 0;
+      let result = parkingLotSystem.park(car);
+    } catch (e) {
+      assert.equal(e.message, `car must be object`);
+    }
   });
 });

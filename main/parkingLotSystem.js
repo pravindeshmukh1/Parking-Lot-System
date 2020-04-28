@@ -8,7 +8,7 @@ class ParkingLotSystem {
       this.parkingLot.push(vehicle);
       return true;
     }
-    return false;
+    throw new Error("car must be object");
   }
 }
 module.exports = ParkingLotSystem;
