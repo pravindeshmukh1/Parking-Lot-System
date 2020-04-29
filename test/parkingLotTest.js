@@ -51,4 +51,13 @@ describe(`ParkingLotSystem`, () => {
       assert.equal(e.message, "unknown vehicle");
     }
   });
+
+  //Uc3 Check the Parking lot Full or not
+  it(`should return messsage when parking lot full`, () => {
+    let car = {};
+    let car1 = {};
+    parkingLotSystem.park(car);
+    let parked = parkingLotSystem.park(car1);
+    assert.equal(parked, "Parking Lot Full");
+  });
 });
