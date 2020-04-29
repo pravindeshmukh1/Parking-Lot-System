@@ -7,9 +7,19 @@ var owner = require(`../main/owner`);
 
 describe(`ParkingLotSystem`, () => {
   let parkingLotSystem;
-  let Owner;
+
   beforeEach(`initset`, () => {
     parkingLotSystem = new ParkingLotSystem();
+   sinon
+      .stub(parkingLotSystem, "isFull")
+      .onFirstCall()
+      .returns(false)
+      .onSecondCall()
+      .returns(true);
+  });
+
+  afterEach(`After restore`, () => {
+    parkingLotSystem.isFull.restore();
   });
 
   //UC1- Parking Lot is defined or not
@@ -55,7 +65,7 @@ describe(`ParkingLotSystem`, () => {
     }
   });
 
-  //Uc3 Check the Parking lot Full or not
+  //Uc3-Check the Parking lot Full or not
   it(`should return messsage when parking lot full`, () => {
     let car = {};
     let car1 = {};
@@ -68,15 +78,8 @@ describe(`ParkingLotSystem`, () => {
   it(`should return true when notify owner given parking lot full`, () => {
     let car = {};
     let car1 = {};
-    let stub = sinon
-      .stub(parkingLotSystem, "isFull")
-      .onFirstCall()
-      .returns(false)
-      .onSecondCall()
-      .returns(true);
     expect(parkingLotSystem.park(car)).to.be.equal(true);
     parkingLotSystem.park(car1);
     expect(owner.notifyFull()).to.be.equal(true);
-    stub.restore();
   });
 });
