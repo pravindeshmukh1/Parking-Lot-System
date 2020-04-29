@@ -1,0 +1,19 @@
+{
+  "name": "parkinglotsystem",
+  "version": "1.0.0",
+  "description": "Parking Lot System",
+  "main": "main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "pravin",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.2",
+    "sinon": "^9.0.2"
+  }
+}
