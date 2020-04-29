@@ -1,5 +1,5 @@
 var owner = require(`./owner`);
-var airportSecurity= require(`./airportSecurity`)
+var airportSecurity = require(`./airportSecurity`);
 
 class ParkingLotSystem {
   constructor() {
@@ -22,10 +22,12 @@ class ParkingLotSystem {
   unparked(vehicle) {
     if (this.parkingLot.includes(vehicle)) {
       this.parkingLot.pop(vehicle);
+      owner.notifyAvailable();
       return true;
     }
     throw new Error("unknown vehicle");
   }
+
   isFull() {
     return this.parkingLot.length === 1;
   }
