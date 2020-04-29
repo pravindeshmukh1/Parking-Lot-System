@@ -12,7 +12,7 @@ describe(`ParkingLotSystem`, () => {
   beforeEach(`initset`, () => {
     parkingLotSystem = new ParkingLotSystem();
     sinon
-      .stub(parkingLotSystem, "isFull",)
+      .stub(parkingLotSystem, "isFull")
       .onFirstCall()
       .returns(false)
       .onSecondCall()
@@ -99,6 +99,8 @@ describe(`ParkingLotSystem`, () => {
     let car = {};
     expect(parkingLotSystem.park(car)).to.be.equal(true);
     expect(parkingLotSystem.unparked(car)).to.be.equal(true);
-    expect(owner.notifyAvailable()).to.be.equal(`Parking Lot Space is Available`);
+    expect(owner.notifyAvailable()).to.be.equal(
+      `Parking Lot Space is Available`
+    );
   });
 });
