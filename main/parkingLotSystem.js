@@ -1,3 +1,4 @@
+var owner = require(`./owner`);
 class ParkingLotSystem {
   constructor() {
     this.parkingLot = [];
@@ -11,6 +12,7 @@ class ParkingLotSystem {
       }
       throw new Error("car must be object");
     }
+    owner.notifyFull();
     return "Parking Lot Full";
   }
 
