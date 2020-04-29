@@ -4,6 +4,7 @@ var chai = require(`chai`),
 var sinon = require(`sinon`);
 var ParkingLotSystem = require(`../main/parkingLotSystem`);
 var owner = require(`../main/owner`);
+var airportSecurity=require(`../main/airportSecurity`);
 
 describe(`ParkingLotSystem`, () => {
   let parkingLotSystem;
@@ -81,5 +82,15 @@ describe(`ParkingLotSystem`, () => {
     expect(parkingLotSystem.park(car)).to.be.equal(true);
     parkingLotSystem.park(car1);
     expect(owner.notifyFull()).to.be.equal(true);
+  });
+
+  //UC4-Notify the Airport Security When Parking Lot Full 
+  it(`should return true when notify airport security given parking lot full`, () => {
+    let car = {};
+    let car1 = {};
+    expect(parkingLotSystem.park(car)).to.be.equal(true);
+    let parked=parkingLotSystem.park(car1);
+    expect(airportSecurity.notifyFull()).to.be.equal(true);
+    assert.equal(parked, "Parking Lot Full");
   });
 });
