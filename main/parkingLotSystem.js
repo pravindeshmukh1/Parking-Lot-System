@@ -1,15 +1,17 @@
-let parkingLotMaxSize = 3;
 class ParkingLotSystem {
   constructor() {
     this.parkingLot = [];
   }
 
   park(vehicle) {
-    if (typeof vehicle === "object" && !this.isFull()) {
-      this.parkingLot.push(vehicle);
-      return true;
+    if (!this.isFull()) {
+      if (typeof vehicle === "object") {
+        this.parkingLot.push(vehicle);
+        return true;
+      }
+      throw new Error("car must be object");
     }
-    throw new Error("car must be object");
+    return "Parking Lot Full";
   }
 
   unparked(vehicle) {
@@ -20,7 +22,7 @@ class ParkingLotSystem {
     throw new Error("unknown vehicle");
   }
   isFull() {
-    return this.parkingLotMaxSize;
+    return this.parkingLot.length === 1;
   }
 }
 module.exports = ParkingLotSystem;
