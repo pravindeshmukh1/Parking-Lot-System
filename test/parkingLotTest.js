@@ -4,15 +4,15 @@ var chai = require(`chai`),
 var sinon = require(`sinon`);
 var ParkingLotSystem = require(`../main/parkingLotSystem`);
 var owner = require(`../main/owner`);
-var airportSecurity=require(`../main/airportSecurity`);
+var airportSecurity = require(`../main/airportSecurity`);
 
 describe(`ParkingLotSystem`, () => {
   let parkingLotSystem;
 
   beforeEach(`initset`, () => {
     parkingLotSystem = new ParkingLotSystem();
-   sinon
-      .stub(parkingLotSystem, "isFull")
+    sinon
+      .stub(parkingLotSystem, "isFull",)
       .onFirstCall()
       .returns(false)
       .onSecondCall()
@@ -84,13 +84,21 @@ describe(`ParkingLotSystem`, () => {
     expect(owner.notifyFull()).to.be.equal(true);
   });
 
-  //UC4-Notify the Airport Security When Parking Lot Full 
+  //UC4-Notify the Airport Security When Parking Lot Full
   it(`should return true when notify airport security given parking lot full`, () => {
     let car = {};
     let car1 = {};
     expect(parkingLotSystem.park(car)).to.be.equal(true);
-    let parked=parkingLotSystem.park(car1);
+    let parked = parkingLotSystem.park(car1);
     expect(airportSecurity.notifyFull()).to.be.equal(true);
     assert.equal(parked, "Parking Lot Full");
+  });
+
+  //UC5-Notify the Parking Lot Owner when Space is Available
+  it(`should notify the owner when parking lot is Full`, () => {
+    let car = {};
+    expect(parkingLotSystem.park(car)).to.be.equal(true);
+    expect(parkingLotSystem.unparked(car)).to.be.equal(true);
+    expect(owner.notifyAvailable()).to.be.equal(`Parking Lot Space is Available`);
   });
 });
