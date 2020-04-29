@@ -1,4 +1,6 @@
 var owner = require(`./owner`);
+var airportSecurity= require(`./airportSecurity`)
+
 class ParkingLotSystem {
   constructor() {
     this.parkingLot = [];
@@ -13,6 +15,7 @@ class ParkingLotSystem {
       throw new Error("car must be object");
     }
     owner.notifyFull();
+    airportSecurity.notifyFull();
     return "Parking Lot Full";
   }
 
