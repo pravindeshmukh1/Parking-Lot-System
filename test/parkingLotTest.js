@@ -1,10 +1,13 @@
 var chai = require(`chai`),
   expect = chai.expect,
   assert = chai.assert;
-var ParkingLotSystem = require(`../main/parkingLotSystem.js`);
+var sinon = require(`sinon`);
+var ParkingLotSystem = require(`../main/parkingLotSystem`);
+var owner = require(`../main/owner`);
 
 describe(`ParkingLotSystem`, () => {
   let parkingLotSystem;
+  let Owner;
   beforeEach(`initset`, () => {
     parkingLotSystem = new ParkingLotSystem();
   });
@@ -59,5 +62,21 @@ describe(`ParkingLotSystem`, () => {
     parkingLotSystem.park(car);
     let parked = parkingLotSystem.park(car1);
     assert.equal(parked, "Parking Lot Full");
+  });
+
+  // Notify the Parking Lot Owner When Parking Lot Full
+  it(`should return true when notify owner given parking lot full`, () => {
+    let car = {};
+    let car1 = {};
+    let stub = sinon
+      .stub(parkingLotSystem, "isFull")
+      .onFirstCall()
+      .returns(false)
+      .onSecondCall()
+      .returns(true);
+    expect(parkingLotSystem.park(car)).to.be.equal(true);
+    parkingLotSystem.park(car1);
+    expect(owner.notifyFull()).to.be.equal(true);
+    stub.restore();
   });
 });
