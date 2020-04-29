@@ -104,3 +104,20 @@ describe(`ParkingLotSystem`, () => {
     );
   });
 });
+
+//UC6-Parking Lot Empty Slote Identification
+describe(`Test the Parking Lot Position Availability`, () => {
+  let parkingLotSystem = new ParkingLotSystem();
+
+  it(`given cars when one car unparked at particular position available should return position`, () => {
+    let car1 = {};
+    let car2 = {};
+    let car3 = {};
+    parkingLotSystem.park(car1);
+    parkingLotSystem.park(car2);
+    parkingLotSystem.park(car3);
+    parkingLotSystem.unparked(car2);
+    let emptySlots = parkingLotSystem.checkEmptySlots();
+    assert.equal(emptySlots, 1);
+  });
+});
