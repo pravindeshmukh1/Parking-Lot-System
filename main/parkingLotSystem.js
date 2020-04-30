@@ -42,17 +42,17 @@ class ParkingLotSystem {
   }
 
   checkEmptySlots() {
-    for (let i = 0; i < this.parkingLot.length; i++) {
-      if (this.parkingLot[i] == null) {
-        return i;
+    for (let slot = 0; slot < this.parkingLot.length; slot++) {
+      if (this.parkingLot[slot] == null) {
+        return slot;
       }
     }
     return false;
   }
   findVehicle(vehicle) {
-    for (let i = 0; i < this.parkingLot.length; i++) {
-      if (this.parkingLot[i] == vehicle) {
-        return i;
+    for (let pos = 0; pos < this.parkingLot.length; i++) {
+      if (this.parkingLot[pos] == vehicle) {
+        return pos;
       }
       return false;
     }
