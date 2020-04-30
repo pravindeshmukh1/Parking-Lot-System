@@ -49,5 +49,12 @@ class ParkingLotSystem {
     }
     return false;
   }
+  findVehicle(vehicle) {
+    for (let i = 0; i < this.parkingLot.length; i++) {
+      if (this.parkingLot[i] == vehicle) {
+        return i;
+      }
+    }
+  }
 }
 module.exports = ParkingLotSystem;
