@@ -6,7 +6,7 @@ var ParkingLotSystem = require(`../main/parkingLotSystem`);
 var owner = require(`../main/owner`);
 var airportSecurity = require(`../main/airportSecurity`);
 
-describe(`ParkingLotSystem`, () => {
+describe(`Testing Parking Lot System`, () => {
   let parkingLotSystem;
 
   beforeEach(`initset`, () => {
@@ -107,12 +107,13 @@ describe(`ParkingLotSystem`, () => {
 
 //UC6-Parking Lot Empty Slote Identification
 describe(`Test the Parking Lot Position Availability`, () => {
+
   let parkingLotSystem;
   beforeEach(`initset`, () => {
     parkingLotSystem = new ParkingLotSystem();
   });
 
-
+  // Unparked the car so return the position
   it(`given cars when one car unparked at particular position available should return position`, () => {
     let car1 = {};
     let car2 = {};
@@ -124,15 +125,24 @@ describe(`Test the Parking Lot Position Availability`, () => {
     let emptySlots = parkingLotSystem.checkEmptySlots();
     assert.equal(emptySlots, 1);
   });
+
   //Uc7-Find the Car in Parking Lot
-  it(`given car when car present in parking lot should return car location`,()=>{
-    let car1={};
-    let car2={};
-    let car3={};
+  it(`given car when car present in parking lot should return car location`, () => {
+    let car1 = {};
+    let car2 = {};
+    let car3 = {};
     parkingLotSystem.park(car1);
     parkingLotSystem.park(car2);
-    parkingLotSystem.park(car3);
-    let findCar=parkingLotSystem.findVehicle(car3);
-    assert.equal(findCar,2);   
-    })
+    parkingLotSystem.park(car3);    
+    let findCar = parkingLotSystem.findVehicle(car1);
+    assert.equal(findCar, 0);
+  });
+
+  //Find the Car in Parking Lot if not.
+  it(`given car when car not present in parking lot should return false`, () => {
+    let car = {};
+    expect(parkingLotSystem.park(car)).to.be.equal(true);
+    expect(parkingLotSystem.unparked(car)).to.be.equal(true);
+    expect(parkingLotSystem.findVehicle(car)).to.be.equal(false);
+  });
 });
