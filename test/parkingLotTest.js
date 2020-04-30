@@ -107,7 +107,11 @@ describe(`ParkingLotSystem`, () => {
 
 //UC6-Parking Lot Empty Slote Identification
 describe(`Test the Parking Lot Position Availability`, () => {
-  let parkingLotSystem = new ParkingLotSystem();
+  let parkingLotSystem;
+  beforeEach(`initset`, () => {
+    parkingLotSystem = new ParkingLotSystem();
+  });
+
 
   it(`given cars when one car unparked at particular position available should return position`, () => {
     let car1 = {};
@@ -120,4 +124,15 @@ describe(`Test the Parking Lot Position Availability`, () => {
     let emptySlots = parkingLotSystem.checkEmptySlots();
     assert.equal(emptySlots, 1);
   });
+  //Uc7-Find the Car in Parking Lot
+  it(`given car when car present in parking lot should return car location`,()=>{
+    let car1={};
+    let car2={};
+    let car3={};
+    parkingLotSystem.park(car1);
+    parkingLotSystem.park(car2);
+    parkingLotSystem.park(car3);
+    let findCar=parkingLotSystem.findVehicle(car3);
+    assert.equal(findCar,2);   
+    })
 });
