@@ -54,6 +54,7 @@ class ParkingLotSystem {
       if (this.parkingLot[i] == vehicle) {
         return i;
       }
+      return false;
     }
   }
 }
