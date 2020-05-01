@@ -39,7 +39,7 @@ describe(`Testing Parking Lot System`, () => {
   it(`should throw exception when given car as other then as object`, () => {
     try {
       let car = 0;
-      let result = parkingLotSystem.park(car);
+      parkingLotSystem.park(car);
     } catch (e) {
       assert.equal(e.message, `car must be object`);
     }
@@ -48,7 +48,7 @@ describe(`Testing Parking Lot System`, () => {
   //UC2-Unpark the Car from Parking Lot
   it(`should return true when given car when unparked to go to home`, () => {
     let car = {};
-    let parked = parkingLotSystem.park(car);
+    parkingLotSystem.park(car);
     let unparked = parkingLotSystem.unparked(car);
     assert.isTrue(unparked);
   });
@@ -107,7 +107,6 @@ describe(`Testing Parking Lot System`, () => {
 
 //UC6-Parking Lot Empty Slote Identification
 describe(`Test the Parking Lot Position Availability`, () => {
-
   let parkingLotSystem;
   beforeEach(`initset`, () => {
     parkingLotSystem = new ParkingLotSystem();
@@ -126,14 +125,14 @@ describe(`Test the Parking Lot Position Availability`, () => {
     assert.equal(emptySlots, 1);
   });
 
-  //Uc7-Find the Car in Parking Lot
+  //UC7-Find the Car in Parking Lot
   it(`given car when car present in parking lot should return car location`, () => {
     let car1 = {};
     let car2 = {};
     let car3 = {};
     parkingLotSystem.park(car1);
     parkingLotSystem.park(car2);
-    parkingLotSystem.park(car3);    
+    parkingLotSystem.park(car3);
     let findCar = parkingLotSystem.findVehicle(car1);
     assert.equal(findCar, 0);
   });
@@ -144,5 +143,15 @@ describe(`Test the Parking Lot Position Availability`, () => {
     expect(parkingLotSystem.park(car)).to.be.equal(true);
     expect(parkingLotSystem.unparked(car)).to.be.equal(true);
     expect(parkingLotSystem.findVehicle(car)).to.be.equal(false);
+  });
+
+  //UC-8 Car Parking time inform to owner
+  it(`given car when car parked time applied should return true`, () => {
+    let car = {
+      date: "new Date()",
+    };
+    let parkedCar = parkingLotSystem.park(car);
+    parkingLotSystem.unparked(car);
+    assert.isTrue(parkedCar);
   });
 });
