@@ -9,5 +9,8 @@ class Owner {
   notifyAvailable() {
     return `Parking Lot Space is Available`;
   }
+  informTime() {
+    return new Date();
+  }
 }
 module.exports = new Owner();

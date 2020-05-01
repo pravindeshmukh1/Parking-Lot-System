@@ -21,6 +21,7 @@ class ParkingLotSystem {
           }
         }
         this.parkingLot.push(vehicle);
+        owner.informTime();
         return true;
       }
     }
@@ -31,6 +32,7 @@ class ParkingLotSystem {
       if (this.parkingLot[i] == vehicle) {
         this.parkingLot.splice(i, 1, null);
         owner.notifyAvailable();
+        owner.informTime();
         return true;
       }
     }
