@@ -154,6 +154,7 @@ describe(`Test the Parking Lot Position Availability`, () => {
     parkingLotSystem.unparked(car);
     assert.isTrue(parkedCar);
   });
+
   //UC-9 Cars Parking Evenly Distribution on Parking Lot
   it(`given cars when cars evenly destribut and  parked in parking lot should return true`, () => {
     let car1 = { name: "Tata" };
@@ -176,5 +177,29 @@ describe(`Test the Parking Lot Position Availability`, () => {
     parkingLotSystem.park(car9);
     let evenlyDistribut = parkingLotSystem.evenlyDistribution(3);
     expect(evenlyDistribut, true);
+  });
+
+  //UC-10 Handicap Driver want to Park Car at Nearest Free Space
+  it(`given handicap driver car when car parked at nearest free space should return true`, () => {
+    let car1 = { name: "Tata" };
+    let car2 = { name: "Ford" };
+    let car3 = { handicap: "yes" };
+    parkingLotSystem.park(car1);
+    parkingLotSystem.park(car2);
+    let result=parkingLotSystem.park(car3);
+    expect(result, true);
+  })
+  
+  // Multiple Handicap Driver want to Park Car at Nearest Free Space
+  it(`given multiple handicap driver cars when parked at nearest free space should return true`, () => {
+    let car1 = { name: "Tata" };
+    let car2 = { name: "Ford" };
+    let car3 = { handicap: "yes" };
+    let car4 = { handicap: "yes" };
+    parkingLotSystem.park(car1);
+    parkingLotSystem.park(car2);
+    parkingLotSystem.park(car3);
+    let result=parkingLotSystem.park(car4);
+    expect(result, true);
   });
 });
