@@ -4,7 +4,7 @@ class Owner {
   }
 
   notifyFull() {
-    let notify = this.full = true ;
+    let notify = (this.full = true);
     return notify;
   }
   notifyAvailable() {

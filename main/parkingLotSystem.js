@@ -5,7 +5,7 @@ var chunk = require("lodash.chunk");
 class ParkingLotSystem {
   constructor() {
     this.parkingLot = [];
-    this.evenlyDistribute = 4;
+    this.evenlyDistribute = 3;
   }
 
   park = (vehicle) => {
@@ -61,8 +61,9 @@ class ParkingLotSystem {
     }
   };
 
-  evenlyDistribution = (evenlyDistribut) => {
-    return chunk(this.parkingLot, evenlyDistribut);
+  evenlyDistribution = (evenlyDistribute) => {
+    let evenlyDistribution = chunk(this.parkingLot, evenlyDistribute);
+    return evenlyDistribution;
   };
 
   checkNearestFreeSpace = () => {
