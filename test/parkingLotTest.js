@@ -154,4 +154,27 @@ describe(`Test the Parking Lot Position Availability`, () => {
     parkingLotSystem.unparked(car);
     assert.isTrue(parkedCar);
   });
+  //UC-9 Cars Parking Evenly Distribution on Parking Lot
+  it(`given cars when cars evenly destribut and  parked in parking lot should return true`, () => {
+    let car1 = { name: "Tata" };
+    let car2 = { name: "Ford" };
+    let car3 = { name: "Toyota" };
+    let car4 = { name: "Maruti" };
+    let car5 = { name: "Lamborghini" };
+    let car6 = { name: "Audi" };
+    let car7 = { name: "BMW" };
+    let car8 = { name: "Honda" };
+    let car9 = { name: "Mahindra" };
+    parkingLotSystem.park(car1);
+    parkingLotSystem.park(car2);
+    parkingLotSystem.park(car3);
+    parkingLotSystem.park(car4);
+    parkingLotSystem.park(car5);
+    parkingLotSystem.park(car6);
+    parkingLotSystem.park(car7);
+    parkingLotSystem.park(car8);
+    parkingLotSystem.park(car9);
+    let evenlyDistribut = parkingLotSystem.evenlyDistribution(3);
+    expect(evenlyDistribut, true);
+  });
 });
