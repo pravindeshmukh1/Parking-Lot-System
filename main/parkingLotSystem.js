@@ -1,5 +1,6 @@
 var owner = require(`./owner`);
 var airportSecurity = require(`./airportSecurity`);
+var chunk = require("lodash.chunk");
 
 class ParkingLotSystem {
   constructor() {
@@ -51,6 +52,7 @@ class ParkingLotSystem {
     }
     return false;
   }
+
   findVehicle(vehicle) {
     for (let pos = 0; pos < this.parkingLot.length; i++) {
       if (this.parkingLot[pos] == vehicle) {
@@ -58,6 +60,10 @@ class ParkingLotSystem {
       }
       return false;
     }
+  }
+  
+  evenlyDistribution(size) { 
+    return chunk(this.parkingLot, size);
   }
 }
 module.exports = ParkingLotSystem;
