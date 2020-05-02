@@ -13,14 +13,10 @@ class ParkingLotSystem {
       airportSecurity.notifyFull();
       return "Parking Lot Full";
     } else {
-      if (typeof vehicle != "object") {
-        throw new Error("car must be object");
-      } else {
-        for (let i = 0; i < this.parkingLot.length; i++) {
-          if (this.parkingLot[i] == null) {
-            this.parkingLot.fill(vehicle, i, i + 1);
-          }
-        }
+      if (typeof vehicle != "object") throw new Error("car must be object");
+      else {
+        if (vehicle.valueOf() == "handicap") this.checkNearestFreeSpace();
+        this.checkEmptySlots;
         this.parkingLot.push(vehicle);
         owner.informTime();
         return true;
@@ -61,9 +57,18 @@ class ParkingLotSystem {
       return false;
     }
   }
-  
-  evenlyDistribution(size) { 
+
+  evenlyDistribution(size) {
     return chunk(this.parkingLot, size);
+  }
+
+  checkNearestFreeSpace() {
+    for (let pos = 0; pos < this.parkingLot.length; pos++) {
+      if (this.parkingLot[pos] == `undefined`)
+        this.parkingLot.fill(vehicle, pos, pos + 1);
+      return pos;
+    }
+    return false;
   }
 }
 module.exports = ParkingLotSystem;
