@@ -41,7 +41,17 @@ describe(`Testing Parking Lot System`, () => {
       let car = 0;
       parkingLotSystem.park(car);
     } catch (e) {
-      assert.equal(e.message, `car must be object`);
+      assert.equal(e.message, `Vehicle Must Be Object and not null`);
+    }
+  });
+
+  //Car is other than object throw exception
+  it(`should throw exception when given car as null as other then as object`, () => {
+    try {
+      let car = null;
+      parkingLotSystem.park(car);
+    } catch (e) {
+      assert.equal(e.message, `Vehicle Must Be Object and not null`);
     }
   });
 
@@ -114,26 +124,34 @@ describe(`Test the Parking Lot Position Availability`, () => {
 
   // Unparked the car so return the position
   it(`given cars when one car unparked at particular position available should return position`, () => {
-    let car1 = {};
-    let car2 = {};
-    let car3 = {};
-    parkingLotSystem.park(car1);
-    parkingLotSystem.park(car2);
-    parkingLotSystem.park(car3);
-    parkingLotSystem.unparked(car2);
+    let cars = [
+      { name: "Tata" },
+      { name: "Ford" },
+      { name: "Toyota" },
+      { name: "Maruti" },
+      { name: "Lamborghini" },
+    ];
+    cars.map((cars) => {
+      parkingLotSystem.park(cars);
+    });
+    parkingLotSystem.unparked(cars[1]);
     let emptySlots = parkingLotSystem.checkEmptySlots();
     assert.equal(emptySlots, 1);
   });
 
   //UC7-Find the Car in Parking Lot
   it(`given car when car present in parking lot should return car location`, () => {
-    let car1 = {};
-    let car2 = {};
-    let car3 = {};
-    parkingLotSystem.park(car1);
-    parkingLotSystem.park(car2);
-    parkingLotSystem.park(car3);
-    let findCar = parkingLotSystem.findVehicle(car1);
+    let cars = [
+      { name: "Tata" },
+      { name: "Ford" },
+      { name: "Toyota" },
+      { name: "Maruti" },
+      { name: "Lamborghini" },
+    ];
+    cars.map((cars) => {
+      parkingLotSystem.park(cars);
+    });
+    let findCar = parkingLotSystem.findVehicle(cars[1]);
     assert.equal(findCar, 0);
   });
 
@@ -157,24 +175,20 @@ describe(`Test the Parking Lot Position Availability`, () => {
 
   //UC-9 Cars Parking Evenly Distribution on Parking Lot
   it(`given cars when cars evenly destribut and  parked in parking lot should return true`, () => {
-    let car1 = { name: "Tata" };
-    let car2 = { name: "Ford" };
-    let car3 = { name: "Toyota" };
-    let car4 = { name: "Maruti" };
-    let car5 = { name: "Lamborghini" };
-    let car6 = { name: "Audi" };
-    let car7 = { name: "BMW" };
-    let car8 = { name: "Honda" };
-    let car9 = { name: "Mahindra" };
-    parkingLotSystem.park(car1);
-    parkingLotSystem.park(car2);
-    parkingLotSystem.park(car3);
-    parkingLotSystem.park(car4);
-    parkingLotSystem.park(car5);
-    parkingLotSystem.park(car6);
-    parkingLotSystem.park(car7);
-    parkingLotSystem.park(car8);
-    parkingLotSystem.park(car9);
+    let cars = [
+      { name: "Tata" },
+      { name: "Ford" },
+      { name: "Toyota" },
+      { name: "Maruti" },
+      { name: "Lamborghini" },
+      { name: "Audi" },
+      { name: "BMW" },
+      { name: "Honda" },
+      { name: "Mahindra" },
+    ];
+    cars.map((cars) => {
+      parkingLotSystem.park(cars);
+    });
     let evenlyDistribut = parkingLotSystem.evenlyDistribution(3);
     expect(evenlyDistribut, true);
   });
@@ -186,20 +200,22 @@ describe(`Test the Parking Lot Position Availability`, () => {
     let car3 = { handicap: "yes" };
     parkingLotSystem.park(car1);
     parkingLotSystem.park(car2);
-    let result=parkingLotSystem.park(car3);
+    let result = parkingLotSystem.park(car3);
     expect(result, true);
-  })
-  
+  });
+
   // Multiple Handicap Driver want to Park Car at Nearest Free Space
   it(`given multiple handicap driver cars when parked at nearest free space should return true`, () => {
-    let car1 = { name: "Tata" };
-    let car2 = { name: "Ford" };
-    let car3 = { handicap: "yes" };
-    let car4 = { handicap: "yes" };
-    parkingLotSystem.park(car1);
-    parkingLotSystem.park(car2);
-    parkingLotSystem.park(car3);
-    let result=parkingLotSystem.park(car4);
+    let cars = [
+      { name: "Tata" },
+      { name: "Ford" },
+      { name: "Toyota", handicap: "yes" },
+      { name: "Audi", handicap: "yes" },
+    ];
+    cars.map((cars) => {
+      parkingLotSystem.park(cars);
+    });
+    let result = parkingLotSystem.park(cars);
     expect(result, true);
   });
 });

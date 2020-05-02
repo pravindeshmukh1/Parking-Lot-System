@@ -4,13 +4,15 @@ class Owner {
   }
 
   notifyFull() {
-    return (this.full = true);
+    let notify = this.full = true ;
+    return notify;
   }
   notifyAvailable() {
     return `Parking Lot Space is Available`;
   }
   informTime() {
-    return new Date();
+    let date = new Date();
+    return date;
   }
 }
 module.exports = new Owner();

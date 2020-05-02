@@ -1,11 +1,11 @@
 class AirportSecurity {
-    constructor() {
-      this.full = false;
-    }
-  
-    notifyFull() {
-      return (this.full = true);
-    }
+  constructor() {
+    this.full = false;
   }
-  module.exports = new AirportSecurity();
-  
+
+  notifyFull() {
+    let notify = (this.full = true);
+    return notify;
+  }
+}
+module.exports = new AirportSecurity();
