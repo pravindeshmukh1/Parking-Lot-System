@@ -5,6 +5,7 @@ var sinon = require(`sinon`);
 var ParkingLotSystem = require(`../main/parkingLotSystem`);
 var owner = require(`../main/owner`);
 var airportSecurity = require(`../main/airportSecurity`);
+var driver = require(`../main/driver`);
 
 describe(`Testing Parking Lot System`, () => {
   let parkingLotSystem;
@@ -12,7 +13,7 @@ describe(`Testing Parking Lot System`, () => {
   beforeEach(`initset`, () => {
     parkingLotSystem = new ParkingLotSystem();
     sinon
-      .stub(parkingLotSystem, "isFull")
+      .stub(parkingLotSystem, "checkParkingLotFull")
       .onFirstCall()
       .returns(false)
       .onSecondCall()
@@ -20,7 +21,7 @@ describe(`Testing Parking Lot System`, () => {
   });
 
   afterEach(`After restore`, () => {
-    parkingLotSystem.isFull.restore();
+    parkingLotSystem.checkParkingLotFull.restore();
   });
 
   //UC1- Parking Lot is defined or not
@@ -80,9 +81,8 @@ describe(`Testing Parking Lot System`, () => {
   it(`should return messsage when parking lot full`, () => {
     let car = {};
     let car1 = {};
-    parkingLotSystem.park(car);
-    let parked = parkingLotSystem.park(car1);
-    assert.equal(parked, "Parking Lot Full");
+    assert.isTrue(parkingLotSystem.park(car));
+    assert.equal(parkingLotSystem.park(car1), "Parking Lot Full");
   });
 
   // Notify the Parking Lot Owner When Parking Lot Full
@@ -135,7 +135,7 @@ describe(`Test the Parking Lot Position Availability`, () => {
       parkingLotSystem.park(cars);
     });
     parkingLotSystem.unparked(cars[1]);
-    let emptySlots = parkingLotSystem.checkEmptySlots();
+    let emptySlots = parkingLotSystem.checkEmptySlotsForNormalDriver();
     assert.equal(emptySlots, 1);
   });
 
@@ -152,7 +152,7 @@ describe(`Test the Parking Lot Position Availability`, () => {
       parkingLotSystem.park(cars);
     });
     let findCar = parkingLotSystem.findVehicle(cars[1]);
-    assert.equal(findCar, 0);
+    assert.equal(findCar, 1);
   });
 
   //Find the Car in Parking Lot if not.
@@ -197,10 +197,12 @@ describe(`Test the Parking Lot Position Availability`, () => {
   it(`given handicap driver car when car parked at nearest free space should return true`, () => {
     let car1 = { name: "Tata" };
     let car2 = { name: "Ford" };
-    let car3 = { handicap: "yes" };
-    parkingLotSystem.park(car1);
-    parkingLotSystem.park(car2);
-    let result = parkingLotSystem.park(car3);
+    let car3 = { name: "Mahindra" };
+    let normalDriver = driver.type.NORMAL;
+    let handicapDriver = driver.type.HANDICAP;
+    parkingLotSystem.park(car1, normalDriver);
+    parkingLotSystem.park(car2, normalDriver);
+    let result = parkingLotSystem.park(car3, handicapDriver);
     expect(result, true);
   });
 
@@ -209,13 +211,34 @@ describe(`Test the Parking Lot Position Availability`, () => {
     let cars = [
       { name: "Tata" },
       { name: "Ford" },
-      { name: "Toyota", handicap: "yes" },
-      { name: "Audi", handicap: "yes" },
+      { name: "Toyota" },
+      { name: "Audi" },
     ];
+    let handicapDriver = driver.type.HANDICAP;
     cars.map((cars) => {
-      parkingLotSystem.park(cars);
+      assert.isTrue(parkingLotSystem.park(cars, handicapDriver));
     });
-    let result = parkingLotSystem.park(cars);
-    expect(result, true);
+  });
+  // Multiple Handicap Driver want to Park Car at Nearest Free Space and return Position
+  it(`given cars when one car unparked at particular position available should return position`, () => {
+    let cars = [
+      { name: "Tata" },
+      { name: "Ford" },
+      { name: "Toyota" },
+      { name: "Maruti" },
+      { name: "Lamborghini" },
+    ];
+    let normalDriver = driver.type.NORMAL;
+    let handicapDriver = driver.type.HANDICAP;
+
+    assert.isTrue(parkingLotSystem.park(cars[0], normalDriver));
+    assert.isTrue(parkingLotSystem.park(cars[1], normalDriver));
+    assert.isTrue(parkingLotSystem.park(cars[2], normalDriver));
+    assert.isTrue(parkingLotSystem.park(cars[3], handicapDriver));
+    assert.isTrue(parkingLotSystem.park(cars[4], handicapDriver));
+
+    assert.isTrue(parkingLotSystem.unparked(cars[2]));
+    let emptySlots = parkingLotSystem.checkEmptySlotsForHandicapDriver();
+    assert.equal(emptySlots, 2);
   });
 });

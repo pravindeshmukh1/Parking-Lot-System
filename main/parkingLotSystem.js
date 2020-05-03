@@ -8,22 +8,20 @@ class ParkingLotSystem {
     this.evenlyDistribute = 3;
   }
 
-  park = (vehicle) => {
-    if (this.isFull()) {
-      owner.notifyFull();
-      airportSecurity.notifyFull();
-      return "Parking Lot Full";
-    } else {
-      if (typeof vehicle != "object" || vehicle == null)
-        throw new Error("Vehicle Must Be Object and not null");
-      else {
-        if (vehicle.valueOf() == "handicap") this.checkNearestFreeSpace();
-        this.checkEmptySlots;
+  park = (vehicle, dirverType) => {
+    if (this.checkParkingLotFull() === false) {
+      if (typeof vehicle === "object" || vehicle === null) {
+        if (dirverType == "handicap")
+          this.checkEmptySlotsForHandicapDriver(vehicle);
+        if (dirverType == "normal")
+          this.checkEmptySlotsForNormalDriver(vehicle);
         this.parkingLot.push(vehicle);
         owner.informTime();
         return true;
       }
+      throw new Error("Vehicle Must Be Object and not null");
     }
+    return "Parking Lot Full";
   };
 
   unparked = (vehicle) => {
@@ -38,41 +36,39 @@ class ParkingLotSystem {
     throw new Error("unknown vehicle");
   };
 
-  isFull = () => {
-    let isFull = this.parkingLot.length === 100;
-    return isFull;
+  checkParkingLotFull = () => {
+    if (this.parkingLot.length === 100) {
+      owner.notifyFull();
+      airportSecurity.notifyFull();
+      return true;
+    }
+    return false;
   };
 
-  checkEmptySlots = () => {
+  checkEmptySlotsForNormalDriver = () => {
     for (let slot = 0; slot < this.parkingLot.length; slot++) {
-      if (this.parkingLot[slot] == null) {
-        return slot;
-      }
+      if (this.parkingLot[slot] == null) return slot;
+    }
+    return false;
+  };
+
+  checkEmptySlotsForHandicapDriver = () => {
+    for (let pos = 0; pos < this.parkingLot.length; pos++) {
+      if (this.parkingLot[pos] == null) return pos;
     }
     return false;
   };
 
   findVehicle = (vehicle) => {
-    for (let pos = 0; pos < this.parkingLot.length; i++) {
-      if (this.parkingLot[pos] == vehicle) {
-        return pos;
-      }
-      return false;
+    for (let pos = 0; pos < this.parkingLot.length; pos++) {
+      if (this.parkingLot[pos] == vehicle) return pos;
     }
+    return false;
   };
 
   evenlyDistribution = (evenlyDistribute) => {
     let evenlyDistribution = chunk(this.parkingLot, evenlyDistribute);
     return evenlyDistribution;
-  };
-
-  checkNearestFreeSpace = () => {
-    for (let pos = 0; pos < this.parkingLot.length; pos++) {
-      if (this.parkingLot[pos] == `undefined`)
-        this.parkingLot.fill(vehicle, pos, pos + 1);
-      return pos;
-    }
-    return false;
   };
 }
 module.exports = ParkingLotSystem;
