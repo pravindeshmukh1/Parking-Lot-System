@@ -1,16 +1,15 @@
 var owner = require(`./owner`);
 var airportSecurity = require(`./airportSecurity`);
-var chunk = require("lodash.chunk");
 
 class ParkingLotSystem {
   constructor(
     totalNoOfLot,
     capacityOfEveryLot,
-    totalVehiclesAllowInParkingLot
+    capacityOfParkingLot
   ) {
     this.parkingLot;
     this.designParkingLot(totalNoOfLot, capacityOfEveryLot);
-    this.noOfVehiclesAllowToPark = totalVehiclesAllowInParkingLot;
+    this.capacityOfParkingLot = capacityOfParkingLot;
     this.noOfVehicles = 0;
   }
 
@@ -23,6 +22,7 @@ class ParkingLotSystem {
       }
     }
   }
+
   park = (vehicle, dirverType, vehicleType) => {
     if (this.checkParkingLotFull() === false) {
       if (typeof vehicle === "object" || vehicle === null) {
@@ -32,7 +32,7 @@ class ParkingLotSystem {
           this.checkEmptyLargeSlot(vehicle);
         } else if (dirverType == "normal" || vehicleType == "small")
           this.checkEmptySlotForNormalDriver(vehicle);
-        this.parkingLot.push(vehicle);
+        //this.parkingLot.push(vehicle);
         owner.informTime();
         return true;
       }
@@ -89,7 +89,25 @@ class ParkingLotSystem {
     }
     return false;
   };
-  
+
+  checkSpecificColorVehicle(color) {
+    this.vehicles = [];
+    for (let lot = 0; lot < this.parkingLot.length; lot++) {
+      for (let slot = 0; slot < this.parkingLot.length; slot++) {
+        if (this.parkingLot[lot][slot] != null) {
+          if (this.parkingLot[lot][slot].color === color) {
+            let vehiclePosition = {
+              lot: lot,
+              slot: slot,
+            };
+            this.vehicles.push(vehiclePosition);
+          }
+        }
+      }
+    }
+    return this.vehicles;
+  }
+
   unparked = (vehicle) => {
     for (let lot = 0; lot < this.parkingLot.length; lot++) {
       for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
