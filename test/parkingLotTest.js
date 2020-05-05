@@ -219,18 +219,41 @@ describe(`Test the Parking Lot Position Availability`, () => {
 
   //UC-12 Search All white Vehicle in Parking Lot
   it(`give multiple color cars should search white cars in parking lot`, () => {
-    let parkingLotSystem = new ParkingLotSystem(2, 2, 4);
+    //  let parkingLotSystem = new ParkingLotSystem(2, 2, 4);
     let cars = [
-      { name: "Ford", color: "red" },
-      { name: "Tata", color: "white" },
-      { name: "Toyota", color: "black" },
-      { name: "Maruti", color: "white" },
+      { name: "Ford", color: "Red" },
+      { name: "Tata", color: "White" },
+      { name: "Toyota", color: "Black" },
+      { name: "Maruti", color: "White" },
     ];
     let driverType = driver.type.NORMAL;
     cars.forEach((car) => {
       assert.isTrue(parkingLotSystem.park(car, driverType));
     });
-    let car = parkingLotSystem.checkSpecificColorVehicle("white");
+    let car = parkingLotSystem.checkSpecificColorVehicle("White");
+    assert.equal(car[0].lot, 1);
+    assert.equal(car[0].slot, 0);
+    assert.equal(car[1].lot, 1);
+    assert.equal(car[1].slot, 1);
+  });
+
+  // UC-13 Search the Cars in Parking Lot as per Company Name and Color
+  it(`given multiple cars when parked in parking lot should return all blue toyota cars`, () => {
+    let parkingLotSystem = new ParkingLotSystem(2, 2, 4);
+    let totalCars = [
+      { company: "Toyota", color: "White" },
+      { company: "Toyota", color: "Blue" },
+      { company: "Mahindra", color: "Black" },
+      { company: "Toyota", color: "Blue" },
+    ];
+    let driverType = driver.type.NORMAL;
+    totalCars.forEach((car) => {
+      assert.isTrue(parkingLotSystem.park(car, driverType));
+    });
+    let car = parkingLotSystem.checkSpecificCompanyAndColorVehicle(
+      "Toyota",
+      "Blue"
+    );
     assert.equal(car[0].lot, 1);
     assert.equal(car[0].slot, 0);
     assert.equal(car[1].lot, 1);
