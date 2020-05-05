@@ -211,9 +211,29 @@ describe(`Test the Parking Lot Position Availability`, () => {
 
   it(`given normal car should search large free space for parked normal car`, () => {
     let cars = [{ name: "Tata" }, { name: "Ford" }];
-    let NormalCar = vehicle.type.NORMAL;
+    let normalCar = vehicle.type.NORMAL;
     cars.forEach((car) => {
-      assert.isTrue(parkingLotSystem.park(car, NormalCar));
+      assert.isTrue(parkingLotSystem.park(car, normalCar));
     });
+  });
+
+  //UC-12 Search All white Vehicle in Parking Lot
+  it(`give multiple color cars should search white cars in parking lot`, () => {
+    let parkingLotSystem = new ParkingLotSystem(2, 2, 4);
+    let cars = [
+      { name: "Ford", color: "red" },
+      { name: "Tata", color: "white" },
+      { name: "Toyota", color: "black" },
+      { name: "Maruti", color: "white" },
+    ];
+    let driverType = driver.type.NORMAL;
+    cars.forEach((car) => {
+      assert.isTrue(parkingLotSystem.park(car, driverType));
+    });
+    let car = parkingLotSystem.checkSpecificColorVehicle("white");
+    assert.equal(car[0].lot, 1);
+    assert.equal(car[0].slot, 0);
+    assert.equal(car[1].lot, 1);
+    assert.equal(car[1].slot, 1);
   });
 });
