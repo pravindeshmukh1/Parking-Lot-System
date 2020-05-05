@@ -104,14 +104,15 @@ class ParkingLotSystem {
     return this.vehicles;
   };
 
-  checkSpecificCompanyAndColorVehicle = (company, color) => {
+  checkSpecificCompanyAndColorVehicle = (numberPlate, company, color) => {
     let vehicles = [];
     for (let lot = 0; lot < this.parkingLot.length; lot++) {
       for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
         if (this.parkingLot[lot][slot] != null) {
           if (
             this.parkingLot[lot][slot].company === company &&
-            this.parkingLot[lot][slot].color === color
+            this.parkingLot[lot][slot].color === color &&
+            this.parkingLot[lot][slot].numberPlate === numberPlate
           ) {
             let vehiclePosition = {
               lot: lot,

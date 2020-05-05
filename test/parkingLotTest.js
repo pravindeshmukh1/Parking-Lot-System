@@ -237,26 +237,25 @@ describe(`Test the Parking Lot Position Availability`, () => {
     assert.equal(car[1].slot, 1);
   });
 
-  // UC-13 Search the Cars in Parking Lot as per Company Name and Color
-  it(`given multiple cars when parked in parking lot should return all blue toyota cars`, () => {
+  // UC-13 Search the Cars in Parking Lot as per Number Plate, Company Name and Color
+  it(`given multiple cars when parked in parking lot should return cars as per numberplate,color,company name`, () => {
     let parkingLotSystem = new ParkingLotSystem(2, 2, 4);
     let totalCars = [
-      { company: "Toyota", color: "White" },
-      { company: "Toyota", color: "Blue" },
-      { company: "Mahindra", color: "Black" },
-      { company: "Toyota", color: "Blue" },
+      { numberPlate: "MH.05.AZ.7777", company: "Toyota", color: "White" },
+      { numberPlate: "MH.05.AX.4545", company: "Toyota", color: "Blue" },
+      { numberPlate: "MH.05.DD.5555", company: "Mahindra", color: "Black" },
+      { numberPlate: "MH.05.YT.0101", company: "Toyota", color: "Blue" },
     ];
     let driverType = driver.type.NORMAL;
     totalCars.forEach((car) => {
       assert.isTrue(parkingLotSystem.park(car, driverType));
     });
     let car = parkingLotSystem.checkSpecificCompanyAndColorVehicle(
+      "MH.05.AX.4545",
       "Toyota",
       "Blue"
     );
     assert.equal(car[0].lot, 1);
     assert.equal(car[0].slot, 0);
-    assert.equal(car[1].lot, 1);
-    assert.equal(car[1].slot, 1);
   });
 });
