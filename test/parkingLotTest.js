@@ -107,9 +107,8 @@ describe("Testing Parking Lot System", () => {
     let car1 = {};
     let driverType = driver.type.NORMAL;
     expect(parkingLotSystem.park(car, driverType)).to.be.equal(true);
-    let parked = parkingLotSystem.park(car1);
+    parkingLotSystem.park(car1);
     expect(airportSecurity.notifyFull()).to.be.equal(true);
-    // assert.equal(parked, "Parking Lot Full");
   });
 
   //UC5-Notify the Parking Lot Owner when Space is Available
@@ -147,7 +146,6 @@ describe(`Test the Parking Lot Position Availability`, () => {
 
   // Check the Empty Slot if not available return false
   it("given cars when checking for empty slot if no empty slot should return false", () => {
-    let parkingLotSystem = new ParkingLotSystem(2, 2, 4);
     let cars = [
       { name: "Tata" },
       { name: "Ford" },
@@ -219,7 +217,6 @@ describe(`Test the Parking Lot Position Availability`, () => {
 
   //UC-12 Search All white Vehicle in Parking Lot
   it(`give multiple color cars should search white cars in parking lot`, () => {
-    //  let parkingLotSystem = new ParkingLotSystem(2, 2, 4);
     let cars = [
       { name: "Ford", color: "Red" },
       { name: "Tata", color: "White" },
@@ -239,7 +236,6 @@ describe(`Test the Parking Lot Position Availability`, () => {
 
   // UC-13 Search the Cars in Parking Lot as per Number Plate, Company Name and Color
   it(`given multiple cars when parked in parking lot should return cars as per numberplate,color,company name`, () => {
-    let parkingLotSystem = new ParkingLotSystem(2, 2, 4);
     let totalCars = [
       { numberPlate: "MH.05.AZ.7777", company: "Toyota", color: "White" },
       { numberPlate: "MH.05.AX.4545", company: "Toyota", color: "Blue" },
@@ -257,5 +253,26 @@ describe(`Test the Parking Lot Position Availability`, () => {
     );
     assert.equal(car[0].lot, 1);
     assert.equal(car[0].slot, 0);
+  });
+
+  // UC-14 Search the Cars in Parking Lot as per Company Nam
+  it(`given multiple cars when parked in parking lot should return cars as per company name`, () => {
+    let totalCars = [
+      { numberPlate: "MH.05.AZ.7777", company: "Toyota", color: "White" },
+      { numberPlate: "MH.05.AX.4545", company: "Bmw", color: "Blue" },
+      { numberPlate: "MH.05.DD.5555", company: "Bmw", color: "Black" },
+      { numberPlate: "MH.05.YT.0101", company: "Bmw", color: "Silver" },
+    ];
+    let driverType = driver.type.NORMAL;
+    totalCars.forEach((car) => {
+      assert.isTrue(parkingLotSystem.park(car, driverType));
+    });
+    let car = parkingLotSystem.checkSpecificCompanyVehicle("Bmw");
+    assert.equal(car[0].lot, 0);
+    assert.equal(car[0].slot, 1);
+    assert.equal(car[1].lot, 1);
+    assert.equal(car[1].slot, 0);
+    assert.equal(car[2].lot, 1);
+    assert.equal(car[2].slot, 1);
   });
 });
