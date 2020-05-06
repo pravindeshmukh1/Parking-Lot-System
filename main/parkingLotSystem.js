@@ -105,7 +105,7 @@ class ParkingLotSystem {
   };
 
   checkSpecificCompanyAndColorVehicle = (numberPlate, company, color) => {
-    let vehicles = [];
+    this.vehicles = [];
     for (let lot = 0; lot < this.parkingLot.length; lot++) {
       for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
         if (this.parkingLot[lot][slot] != null) {
@@ -118,13 +118,31 @@ class ParkingLotSystem {
               lot: lot,
               slot: slot,
             };
-            vehicles.push(vehiclePosition);
+            this.vehicles.push(vehiclePosition);
           }
         }
       }
     }
-    return vehicles;
+    return this.vehicles;
   };
+
+  checkSpecificCompanyVehicle(company) {
+    this.vehicles = [];
+    for (let lot = 0; lot < this.parkingLot.length; lot++) {
+      for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
+        if (this.parkingLot[lot][slot] != null) {
+          if (this.parkingLot[lot][slot].company === company) {
+            let vehiclePosition = {
+              lot: lot,
+              slot: slot,
+            };
+            this.vehicles.push(vehiclePosition);
+          }
+        }
+      }
+    }
+    return this.vehicles;
+  }
 
   unparked = (vehicle) => {
     for (let lot = 0; lot < this.parkingLot.length; lot++) {
