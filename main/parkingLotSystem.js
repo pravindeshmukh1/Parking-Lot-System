@@ -28,7 +28,6 @@ class ParkingLotSystem {
           this.checkEmptyLargeSlot(vehicle);
         } else if (dirverType == "normal" || vehicleType == "small")
           this.checkEmptySlotForNormalDriver(vehicle);
-        //this.parkingLot.push(vehicle);
         owner.informTime();
         return true;
       }
@@ -148,7 +147,7 @@ class ParkingLotSystem {
     for (let lot = 0; lot < this.parkingLot.length; lot++) {
       for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
         if (this.parkingLot[lot][slot] == vehicle) {
-          this.parkingLot[lot][slot] == null;
+          this.parkingLot[lot][slot] = null;
           this.noOfVehicles--;
           owner.notifyAvailable();
           owner.informTime();
@@ -183,7 +182,7 @@ class ParkingLotSystem {
   findVehicle = (vehicle) => {
     for (let lot = 0; lot < this.parkingLot.length; lot++) {
       for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
-        if (this.parkingLot[lot][slot] == vehicle) {
+        if (this.parkingLot[lot][slot] === vehicle) {
           let vehiclePosition = { lot: lot, slot: slot };
           return vehiclePosition;
         }

@@ -215,6 +215,12 @@ describe(`Test the Parking Lot Position Availability`, () => {
     });
   });
 
+  // Large Car want to Park Car at Large Free Space postion
+  it(`given large car when parked at free large space should should return true`, () => {
+    let cars = [{ name: "Tata" }, { name: "Ford" }];
+    assert.isTrue(parkingLotSystem.checkEmptyLargeSlot(cars));
+  });
+
   //UC-12 Search All white Vehicle in Parking Lot
   it(`give multiple color cars should search white cars in parking lot`, () => {
     let cars = [
