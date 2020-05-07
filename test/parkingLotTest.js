@@ -9,6 +9,10 @@ var driver = require(`../main/driver`);
 var vehicle = require(`../main/vehicle`);
 
 describe("Testing Parking Lot System", () => {
+  let parkingLotSystem;
+  beforeEach(function () {
+    parkingLotSystem = new ParkingLotSystem(2, 2, 4);
+  });
   //UC1- Parking Lot is defined or not
   it(`should exist`, () => {
     expect(ParkingLotSystem).to.not.be.undefined;
@@ -16,7 +20,6 @@ describe("Testing Parking Lot System", () => {
 
   //Park the Car in Parking Lot
   it(`should return true when given car when parked to catch the flight`, () => {
-    let parkingLotSystem = new ParkingLotSystem(2, 2, 4);
     let cars = [{}, {}];
     cars.forEach((car) => {
       let driverType = driver.type.NORMAL;
@@ -27,7 +30,6 @@ describe("Testing Parking Lot System", () => {
 
   //Car is other than object throw exception
   it(`should throw exception when given car as other then as object`, () => {
-    let parkingLotSystem = new ParkingLotSystem(1, 1, 2);
     try {
       let car = 0;
       let driverType = driver.type.NORMAL;
@@ -38,7 +40,6 @@ describe("Testing Parking Lot System", () => {
   });
   //Car is other than object throw exception
   it(`should throw exception when given car as null as other then as object`, () => {
-    let parkingLotSystem = new ParkingLotSystem(1, 1, 2);
     try {
       let car = null;
       let driverType = driver.type.NORMAL;
@@ -50,7 +51,6 @@ describe("Testing Parking Lot System", () => {
 
   //UC2-Unpark the Car from Parking Lot
   it(`should return true when given car when unparked to go to home`, () => {
-    let parkingLotSystem = new ParkingLotSystem(1, 1, 1);
     let car = {};
     let driverType = driver.type.NORMAL;
     assert.isTrue(parkingLotSystem.park(car, driverType));
@@ -59,7 +59,6 @@ describe("Testing Parking Lot System", () => {
 
   //Unparked the car those are not Parked should return false
   it(`should return throw exception when unparked the car those not park`, () => {
-    let parkingLotSystem = new ParkingLotSystem(1, 1, 1);
     try {
       let car = {};
       let car1 = {};
@@ -74,7 +73,6 @@ describe("Testing Parking Lot System", () => {
 
   //Uc3-Check the Parking lot Full or not
   it(`should return messsage when parking lot full`, () => {
-    let parkingLotSystem = new ParkingLotSystem(2, 2, 4);
     sinon
       .stub(parkingLotSystem, "checkParkingLotFull")
       .onFirstCall()
@@ -91,7 +89,6 @@ describe("Testing Parking Lot System", () => {
 
   // Notify the Parking Lot Owner When Parking Lot Full
   it(`should return true when notify owner given parking lot full`, () => {
-    let parkingLotSystem = new ParkingLotSystem(1, 1, 2);
     let car = {};
     let car1 = {};
     let driverType = driver.type.NORMAL;
@@ -102,7 +99,6 @@ describe("Testing Parking Lot System", () => {
 
   //UC4-Notify the Airport Security When Parking Lot Full
   it(`should return true when notify airport security given parking lot full`, () => {
-    let parkingLotSystem = new ParkingLotSystem(1, 1, 2);
     let car = {};
     let car1 = {};
     let driverType = driver.type.NORMAL;
@@ -113,7 +109,6 @@ describe("Testing Parking Lot System", () => {
 
   //UC5-Notify the Parking Lot Owner when Space is Available
   it(`should notify the owner when parking lot is Full`, () => {
-    let parkingLotSystem = new ParkingLotSystem(1, 1, 2);
     let car = {};
     let driverType = driver.type.NORMAL;
     expect(parkingLotSystem.park(car, driverType)).to.be.equal(true);
