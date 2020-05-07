@@ -82,7 +82,7 @@ class ParkingLotSystem {
         return true;
       }
     }
-    return false;
+    return "no large space available";
   };
 
   checkSpecificColorVehicle = (color) => {
@@ -125,7 +125,7 @@ class ParkingLotSystem {
     return this.vehicles;
   };
 
-  checkSpecificCompanyVehicle(company) {
+  checkSpecificCompanyVehicle = (company) => {
     this.vehicles = [];
     for (let lot = 0; lot < this.parkingLot.length; lot++) {
       for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
@@ -141,7 +141,26 @@ class ParkingLotSystem {
       }
     }
     return this.vehicles;
-  }
+  };
+
+  checkVehileParkedBeforeMinutes = () => {
+    this.vehicles = [];
+    let minute = new Date().getMinutes();
+    for (let lot = 0; lot < this.parkingLot.length; lot++) {
+      for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
+        if (this.parkingLot[lot][slot] != null) {
+          if (minute - this.parkingLot[lot][slot].parkedTime <= 30) {
+            let vehiclePosition = {
+              lot: lot,
+              slot: slot,
+            };
+            this.vehicles.push(vehiclePosition);
+          }
+        }
+      }
+    }
+    return this.vehicles;
+  };
 
   unparked = (vehicle) => {
     for (let lot = 0; lot < this.parkingLot.length; lot++) {
