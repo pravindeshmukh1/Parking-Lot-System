@@ -205,19 +205,6 @@ describe(`Test the Parking Lot Position Availability`, () => {
     cars.forEach((car) => {
       assert.isTrue(parkingLotSystem.park(car, largeCar));
     });
-  });
-
-  it(`given normal car should search large free space for parked normal car`, () => {
-    let cars = [{ name: "Tata" }, { name: "Ford" }];
-    let normalCar = vehicle.type.NORMAL;
-    cars.forEach((car) => {
-      assert.isTrue(parkingLotSystem.park(car, normalCar));
-    });
-  });
-
-  // Large Car want to Park Car at Large Free Space postion
-  it(`given large car when parked at free large space should should return true`, () => {
-    let cars = [{ name: "Tata" }, { name: "Ford" }];
     assert.isTrue(parkingLotSystem.checkEmptyLargeSlot(cars));
   });
 
@@ -280,5 +267,35 @@ describe(`Test the Parking Lot Position Availability`, () => {
     assert.equal(car[1].slot, 0);
     assert.equal(car[2].lot, 1);
     assert.equal(car[2].slot, 1);
+  });
+
+  //UC-15 Find the Vehicle Parked at Last 30 min in Parking Lot
+  it(`given cars when find the car in parking lot in last 30 min should return car position`, () => {
+    let date = new Date();
+    let parkedTime = date.getMinutes() - 10;
+    let totalCars = [
+      {
+        numberPlate: "MH.05.AZ.7777",
+        company: "Toyota",
+        color: "White",
+        parkedTime,
+      },
+      {
+        numberPlate: "MH.05.AX.4545",
+        company: "Toyota",
+        color: "Blue",
+        date,
+      },
+      { numberPlate: "MH.05.DD.5555", company: "Mahindra", color: "Black" },
+      { numberPlate: "MH.05.YT.0101", company: "Toyota", color: "Blue" },
+    ];
+    totalCars.forEach((car) => {
+      assert.isTrue(
+        parkingLotSystem.park(car, driver.type.NORMAL, vehicle.type.SMALL)
+      );
+      let carParkedTime = parkingLotSystem.checkVehileParkedBeforeMinutes();
+      assert.equal(carParkedTime[0].lot, 0);
+      assert.equal(carParkedTime[0].slot, 0);
+    });
   });
 });
