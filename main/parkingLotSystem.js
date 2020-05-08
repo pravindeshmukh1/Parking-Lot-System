@@ -21,17 +21,17 @@ class ParkingLotSystem {
 
   park = (vehicle, dirverType, vehicleType) => {
     if (this.checkParkingLotFull() === false) {
-      if (typeof vehicle === "object" || vehicle === null) {
+      if (typeof vehicle === "object") {
+        if (vehicleType == "large") this.checkEmptyLargeSlot(vehicle);
         if (dirverType == "handicap") {
           this.checkEmptySlotForHandicapDriver(vehicle);
-        } else if (vehicleType == "large") {
-          this.checkEmptyLargeSlot(vehicle);
-        } else if (dirverType == "normal" || vehicleType == "small")
+        } else {
           this.checkEmptySlotForNormalDriver(vehicle);
+        }
         owner.informTime();
         return true;
       }
-      throw new Error("Vehicle Must Be Object and not null");
+      throw new Error("Vehicle Must Be Object");
     }
     return "Parking Lot Full";
   };
@@ -82,84 +82,31 @@ class ParkingLotSystem {
         return true;
       }
     }
-    return "no large space available";
+    return false;
   };
 
-  checkSpecificColorVehicle = (color) => {
-    this.vehicles = [];
+  checkVehicle = (searchParameter) => {
+    let vehicles = [];
+    let keys = Object.keys(searchParameter);
+    let values = Object.values(searchParameter);
+
     for (let lot = 0; lot < this.parkingLot.length; lot++) {
       for (let slot = 0; slot < this.parkingLot.length; slot++) {
         if (this.parkingLot[lot][slot] != null) {
-          if (this.parkingLot[lot][slot].color === color) {
-            let vehiclePosition = {
-              lot: lot,
-              slot: slot,
-            };
-            this.vehicles.push(vehiclePosition);
-          }
-        }
-      }
-    }
-    return this.vehicles;
-  };
-
-  checkSpecificCompanyAndColorVehicle = (numberPlate, company, color) => {
-    this.vehicles = [];
-    for (let lot = 0; lot < this.parkingLot.length; lot++) {
-      for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
-        if (this.parkingLot[lot][slot] != null) {
           if (
-            this.parkingLot[lot][slot].company === company &&
-            this.parkingLot[lot][slot].color === color &&
-            this.parkingLot[lot][slot].numberPlate === numberPlate
+            this.parkingLot[lot][slot][keys[lot]] === values[lot] &&
+            this.parkingLot[lot][slot][keys[lot + 1]] === values[lot + 1]
           ) {
             let vehiclePosition = {
               lot: lot,
               slot: slot,
             };
-            this.vehicles.push(vehiclePosition);
+            vehicles.push(vehiclePosition);
           }
         }
       }
     }
-    return this.vehicles;
-  };
-
-  checkSpecificCompanyVehicle = (company) => {
-    this.vehicles = [];
-    for (let lot = 0; lot < this.parkingLot.length; lot++) {
-      for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
-        if (this.parkingLot[lot][slot] != null) {
-          if (this.parkingLot[lot][slot].company === company) {
-            let vehiclePosition = {
-              lot: lot,
-              slot: slot,
-            };
-            this.vehicles.push(vehiclePosition);
-          }
-        }
-      }
-    }
-    return this.vehicles;
-  };
-
-  checkVehileParkedBeforeMinutes = () => {
-    this.vehicles = [];
-    let minute = new Date().getMinutes();
-    for (let lot = 0; lot < this.parkingLot.length; lot++) {
-      for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
-        if (this.parkingLot[lot][slot] != null) {
-          if (minute - this.parkingLot[lot][slot].parkedTime <= 30) {
-            let vehiclePosition = {
-              lot: lot,
-              slot: slot,
-            };
-            this.vehicles.push(vehiclePosition);
-          }
-        }
-      }
-    }
-    return this.vehicles;
+    return vehicles;
   };
 
   unparked = (vehicle) => {

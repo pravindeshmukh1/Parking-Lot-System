@@ -35,7 +35,7 @@ describe("Testing Parking Lot System", () => {
       let driverType = driver.type.NORMAL;
       parkingLotSystem.park(car, driverType);
     } catch (e) {
-      assert.equal(e.message, `Vehicle Must Be Object and not null`);
+      assert.equal(e.message, `Vehicle Must Be Object`);
     }
   });
   //Car is other than object throw exception
@@ -45,7 +45,7 @@ describe("Testing Parking Lot System", () => {
       let driverType = driver.type.NORMAL;
       parkingLotSystem.park(car, driverType);
     } catch (e) {
-      assert.equal(e.message, `Vehicle Must Be Object and not null`);
+      assert.equal(e.message, `Vehicle Must Be Object`);
     }
   });
 
@@ -203,6 +203,23 @@ describe(`Test the Parking Lot Position Availability`, () => {
     assert.isTrue(parkingLotSystem.checkEmptyLargeSlot(cars));
   });
 
+  //Large Car want to Park Car at Large Free Space postion if not availabe space return false
+  it(`given large car when large space not availabe should return false`, () => {
+    sinon
+      .stub(parkingLotSystem, "checkEmptyLargeSlot")
+      .onFirstCall()
+      .returns(true)
+      .onSecondCall()
+      .returns(false);
+    let cars = [{ name: "Tata" }, { name: "Ford" }];
+    let largeCar = vehicle.type.LARGE;
+    cars.forEach((car) => {
+      assert.isTrue(parkingLotSystem.park(car, largeCar));
+    });
+    assert.isTrue(parkingLotSystem.checkEmptyLargeSlot(cars));
+    assert.isFalse(parkingLotSystem.checkEmptyLargeSlot(cars));
+  });
+
   //UC-12 Search All white Vehicle in Parking Lot
   it(`give multiple color cars should search white cars in parking lot`, () => {
     let cars = [
@@ -215,7 +232,10 @@ describe(`Test the Parking Lot Position Availability`, () => {
     cars.forEach((car) => {
       assert.isTrue(parkingLotSystem.park(car, driverType));
     });
-    let car = parkingLotSystem.checkSpecificColorVehicle("White");
+    searchParameter = {
+      color: "White",
+    };
+    let car = parkingLotSystem.checkVehicle(searchParameter);
     assert.equal(car[0].lot, 1);
     assert.equal(car[0].slot, 0);
     assert.equal(car[1].lot, 1);
@@ -234,34 +254,37 @@ describe(`Test the Parking Lot Position Availability`, () => {
     totalCars.forEach((car) => {
       assert.isTrue(parkingLotSystem.park(car, driverType));
     });
-    let car = parkingLotSystem.checkSpecificCompanyAndColorVehicle(
-      "MH.05.AX.4545",
-      "Toyota",
-      "Blue"
-    );
+    searchParameter = {
+      numberPlate: "MH.05.AX.4545",
+      company: "Toyota",
+      color: "Blue",
+    };
+    let car = parkingLotSystem.checkVehicle(searchParameter);
     assert.equal(car[0].lot, 1);
     assert.equal(car[0].slot, 0);
   });
 
-  // UC-14 Search the Cars in Parking Lot as per Company Nam
+  // UC-14 Search the Cars in Parking Lot as per Company Name
   it(`given multiple cars when parked in parking lot should return cars as per company name`, () => {
     let totalCars = [
       { numberPlate: "MH.05.AZ.7777", company: "Toyota", color: "White" },
       { numberPlate: "MH.05.AX.4545", company: "Bmw", color: "Blue" },
-      { numberPlate: "MH.05.DD.5555", company: "Bmw", color: "Black" },
+      { numberPlate: "MH.05.DD.5555", company: "Bmw", color: "Blue" },
       { numberPlate: "MH.05.YT.0101", company: "Bmw", color: "Silver" },
     ];
     let driverType = driver.type.NORMAL;
     totalCars.forEach((car) => {
       assert.isTrue(parkingLotSystem.park(car, driverType));
     });
-    let car = parkingLotSystem.checkSpecificCompanyVehicle("Bmw");
+    searchParameter = {
+      company: "Bmw",
+      color: "Blue",
+    };
+    let car = parkingLotSystem.checkVehicle(searchParameter);
     assert.equal(car[0].lot, 0);
     assert.equal(car[0].slot, 1);
     assert.equal(car[1].lot, 1);
     assert.equal(car[1].slot, 0);
-    assert.equal(car[2].lot, 1);
-    assert.equal(car[2].slot, 1);
   });
 
   //UC-15 Find the Vehicle Parked at Last 30 min in Parking Lot
@@ -273,13 +296,12 @@ describe(`Test the Parking Lot Position Availability`, () => {
         numberPlate: "MH.05.AZ.7777",
         company: "Toyota",
         color: "White",
-        parkedTime,
+        parkedTime: parkedTime,
       },
       {
         numberPlate: "MH.05.AX.4545",
         company: "Toyota",
         color: "Blue",
-        date,
       },
       { numberPlate: "MH.05.DD.5555", company: "Mahindra", color: "Black" },
       { numberPlate: "MH.05.YT.0101", company: "Toyota", color: "Blue" },
@@ -288,7 +310,8 @@ describe(`Test the Parking Lot Position Availability`, () => {
       assert.isTrue(
         parkingLotSystem.park(car, driver.type.NORMAL, vehicle.type.SMALL)
       );
-      let carParkedTime = parkingLotSystem.checkVehileParkedBeforeMinutes();
+      searchParameter = { parkedTime: parkedTime };
+      let carParkedTime = parkingLotSystem.checkVehicle(searchParameter);
       assert.equal(carParkedTime[0].lot, 0);
       assert.equal(carParkedTime[0].slot, 0);
     });
