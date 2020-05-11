@@ -87,7 +87,7 @@ class ParkingLotSystem {
 
   checkVehicle = (searchParameter, rows) => {
     if (Object.keys(searchParameter).length === 0) {
-      throw new Error("Please Enter correct information");
+      throw new Error("Please Enter Correct Parameter");
     }
     if (rows != undefined && rows.length != 0) {
       return this.checkVehicleInSpecificRow(searchParameter, rows);

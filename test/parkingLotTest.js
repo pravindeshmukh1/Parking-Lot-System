@@ -390,14 +390,60 @@ describe(`Test the Parking Lot Position Availability`, () => {
       };
       let rows = [0, 2];
       let parkedCar = parkingLotSystem.checkVehicle(searchParameter, rows);
-      console.log(parkedCar);
-
       assert.equal(parkedCar[0].lot, 0);
       assert.equal(parkedCar[0].slot, 0);
       assert.equal(parkedCar[1].lot, 0);
       assert.equal(parkedCar[1].slot, 1);
       assert.equal(parkedCar[2].lot, 2);
       assert.equal(parkedCar[2].slot, 1);
+    });
+
+    // UC-16 Test Case To Find Car empty Object as Parameter.
+    it(`given cars when search slot with empty parameter should throw exception`, function () {
+      try {
+        //parkingLotSystem = new ParkingLotSystem(2, 2, 4);
+        let totalCars = [
+          {
+            numberPlate: "MH.05.AX.4545",
+            company: "Toyota",
+            color: "Blue",
+            driverType: driver.type.NORMAL,
+            vehicleType: vehicle.type.SMALL,
+            parkingTime: new Date(),
+          },
+          {
+            numberPlate: "MH.05.AX.5555",
+            company: "Maruti",
+            color: "Silver",
+            driverType: driver.type.NORMAL,
+            vehicleType: vehicle.type.SMALL,
+            parkingTime: new Date(),
+          },
+          {
+            numberPlate: "MH.05.ZA.3333",
+            company: "Mahindra",
+            color: "black",
+            driverType: driver.type.HANDICAP,
+            vehicleType: driver.type.SMALL,
+            parkingTime: new Date(),
+          },
+          {
+            numberPlate: "MH.05.ZA.3333",
+            company: "Tata",
+            color: "White",
+            driverType: driver.type.HANDICAP,
+            vehicleType: driver.type.SMALL,
+            parkingTime: new Date(),
+          },
+        ];
+        totalCars.forEach((car) => {
+          assert.isTrue(parkingLotSystem.park(car));
+        });
+        let searchParameter = {};
+        parkingLotSystem.checkVehicle(searchParameter);
+      } catch (error) {
+        assert.equal("Please Enter Correct Parameter", error.message);
+      }
     });
   });
 });
