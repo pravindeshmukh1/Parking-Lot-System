@@ -35,7 +35,7 @@ describe("Testing Parking Lot System", () => {
       let driverType = driver.type.NORMAL;
       parkingLotSystem.park(car, driverType);
     } catch (e) {
-      assert.equal(e.message, `Vehicle Must Be Object`);
+      assert.equal(e.message, `Vehicle Must Be Object and not null`);
     }
   });
   //Car is other than object throw exception
@@ -45,7 +45,7 @@ describe("Testing Parking Lot System", () => {
       let driverType = driver.type.NORMAL;
       parkingLotSystem.park(car, driverType);
     } catch (e) {
-      assert.equal(e.message, `Vehicle Must Be Object`);
+      assert.equal(e.message, `Vehicle Must Be Object and not null`);
     }
   });
 
@@ -83,7 +83,7 @@ describe("Testing Parking Lot System", () => {
     let car1 = {};
     let driverType = driver.type.NORMAL;
     assert.equal(true, parkingLotSystem.park(car, driverType));
-    assert.equal(parkingLotSystem.park(car1), "Parking Lot Full");
+    assert.isFalse(parkingLotSystem.park(car1));
     parkingLotSystem.checkParkingLotFull.restore();
   });
 
@@ -185,12 +185,10 @@ describe(`Test the Parking Lot Position Availability`, () => {
 
   //UC-10 Handicap Driver want to Park Car at Nearest Free Space
   it(`given handicap driver car when car parked at nearest free space should return true`, () => {
-    let car1 = { name: "Tata" };
-    let car2 = { name: "Ford" };
-    assert.isTrue(parkingLotSystem.park(car1, driver.type.NORMAL));
-    assert.isTrue(parkingLotSystem.park(car2, driver.type.HANDICAP));
-    let result = parkingLotSystem.park(car2);
-    expect(result, true);
+    let car1 = { name: "Tata", driverType: driver.type.HANDICAP };
+    let car2 = { name: "Ford", driverType: driver.type.HANDICAP };
+    assert.isTrue(parkingLotSystem.park(car1));
+    assert.isTrue(parkingLotSystem.checkEmptySlotForHandicapDriver(car2));
   });
 
   //UC-11 Large Car want to Park Car at Large Free Space postion
@@ -287,33 +285,75 @@ describe(`Test the Parking Lot Position Availability`, () => {
     assert.equal(car[1].slot, 0);
   });
 
-  //UC-15 Find the Vehicle Parked at Last 30 min in Parking Lot
-  it(`given cars when find the car in parking lot in last 30 min should return car position`, () => {
-    let date = new Date();
-    let parkedTime = date.getMinutes() - 10;
-    let totalCars = [
-      {
-        numberPlate: "MH.05.AZ.7777",
-        company: "Toyota",
-        color: "White",
-        parkedTime: parkedTime,
-      },
-      {
-        numberPlate: "MH.05.AX.4545",
-        company: "Toyota",
-        color: "Blue",
-      },
-      { numberPlate: "MH.05.DD.5555", company: "Mahindra", color: "Black" },
-      { numberPlate: "MH.05.YT.0101", company: "Toyota", color: "Blue" },
-    ];
-    totalCars.forEach((car) => {
-      assert.isTrue(
-        parkingLotSystem.park(car, driver.type.NORMAL, vehicle.type.SMALL)
-      );
-      searchParameter = { parkedTime: parkedTime };
-      let carParkedTime = parkingLotSystem.checkVehicle(searchParameter);
-      assert.equal(carParkedTime[0].lot, 0);
-      assert.equal(carParkedTime[0].slot, 0);
+  describe(`Find the Vehicle in Parking Lot`, () => {
+    let parkingLotSystem;
+    beforeEach(function () {
+      parkingLotSystem = new ParkingLotSystem(2, 2, 4);
+    });
+
+    //UC-15 Find the Vehicle Parked at Last 30 min in Parking Lot
+    it(`given cars when find the car in parking lot in last 30 min should return car position`, () => {
+      let date = new Date();
+      let parkedTime = date.getMinutes() - 30;
+      let totalCars = [
+        {
+          numberPlate: "MH.05.AZ.7777",
+          company: "Toyota",
+          color: "White",
+          parkedTime: parkedTime,
+        },
+        {
+          numberPlate: "MH.05.AX.4545",
+          company: "Toyota",
+          color: "Blue",
+        },
+        {
+          numberPlate: "MH.05.DD.5555",
+          company: "Mahindra",
+          color: "Black",
+        },
+        {
+          numberPlate: "MH.05.YT.0101",
+          company: "Toyota",
+          color: "Blue",
+        },
+      ];
+      totalCars.forEach((car) => {
+        assert.isTrue(parkingLotSystem.park(car));
+        let carParkedTime = parkingLotSystem.checkVehileParkedBeforeMinutes(30);
+        assert.equal(carParkedTime[0].lot, 0);
+        assert.equal(carParkedTime[0].slot, 0);
+      });
+    });
+
+    //UC-16 Find the Vehicle Parked at Parking Lot According Vehicle and Driver Type
+    it(`given cars when find the all handicap and small type cars should return car position`, () => {
+      let totalCars = [
+        {
+          numberPlate: "MH.05.AZ.7777",
+          company: "Toyota",
+          color: "White",
+          driverType: driver.type.HANDICAP,
+          vehicleType: driver.type.SMALL,
+        },
+        {
+          numberPlate: "MH.05.AX.4545",
+          company: "Toyota",
+          color: "Blue",
+          driverType: driver.type.NORMAL,
+          vehicleType: driver.type.LARGE,
+        },
+      ];
+      totalCars.forEach((car) => {
+        assert.isTrue(parkingLotSystem.park(car));
+        searchParameter = {
+          driverType: driver.type.HANDICAP,
+          vehicleType: driver.type.SMALL,
+        };
+        let carParkedTime = parkingLotSystem.checkVehicle(searchParameter);
+        assert.equal(carParkedTime[0].lot, 0);
+        assert.equal(carParkedTime[0].slot, 0);
+      });
     });
   });
 });

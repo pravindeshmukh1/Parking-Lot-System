@@ -19,11 +19,11 @@ class ParkingLotSystem {
     }
   }
 
-  park = (vehicle, dirverType, vehicleType) => {
+  park = (vehicle) => {
     if (this.checkParkingLotFull() === false) {
-      if (typeof vehicle === "object") {
-        if (vehicleType == "large") this.checkEmptyLargeSlot(vehicle);
-        if (dirverType == "handicap") {
+      if (typeof vehicle === "object" && vehicle != null) {
+        if (vehicle.vehicleType == "large") this.checkEmptyLargeSlot(vehicle);
+        if (vehicle.dirverType == "handicap") {
           this.checkEmptySlotForHandicapDriver(vehicle);
         } else {
           this.checkEmptySlotForNormalDriver(vehicle);
@@ -31,9 +31,9 @@ class ParkingLotSystem {
         owner.informTime();
         return true;
       }
-      throw new Error("Vehicle Must Be Object");
+      throw new Error("Vehicle Must Be Object and not null");
     }
-    return "Parking Lot Full";
+    return false;
   };
 
   checkEmptySlotForNormalDriver = (vehicle) => {
@@ -107,6 +107,30 @@ class ParkingLotSystem {
       }
     }
     return vehicles;
+  };
+
+  checkVehileParkedBeforeMinutes = (minute) => {
+    this.vehicles = [];
+    let currentTimeInMinute = new Date().getMinutes();
+    if (minute != undefined) {
+      for (let lot = 0; lot < this.parkingLot.length; lot++) {
+        for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
+          if (this.parkingLot[lot][slot] != null) {
+            if (
+              currentTimeInMinute - this.parkingLot[lot][slot].parkedTime <=
+              minute
+            ) {
+              let vehiclePosition = {
+                lot: lot,
+                slot: slot,
+              };
+              this.vehicles.push(vehiclePosition);
+            }
+          }
+        }
+      }
+    }
+    return this.vehicles;
   };
 
   unparked = (vehicle) => {
