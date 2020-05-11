@@ -399,9 +399,8 @@ describe(`Test the Parking Lot Position Availability`, () => {
     });
 
     // UC-16 Test Case To Find Car empty Object as Parameter.
-    it(`given cars when search slot with empty parameter should throw exception`, function () {
+    it(`given cars when search slot with empty parameter should throw exception`, () => {
       try {
-        //parkingLotSystem = new ParkingLotSystem(2, 2, 4);
         let totalCars = [
           {
             numberPlate: "MH.05.AX.4545",
@@ -444,6 +443,55 @@ describe(`Test the Parking Lot Position Availability`, () => {
       } catch (error) {
         assert.equal("Please Enter Correct Parameter", error.message);
       }
+    });
+
+    //UC-17 Find the Fradulent Plate Number Vehicle those Parked at Parking Lot
+    it(`given cars when search fradulent number plate car should return position`, () => {
+      let totalCars = [
+        {
+          numberPlate: "",
+          company: "Toyota",
+          color: "Blue",
+          driverType: driver.type.NORMAL,
+          vehicleType: vehicle.type.SMALL,
+          parkingTime: new Date(),
+        },
+        {
+          numberPlate: "MH.05.AX.5555",
+          company: "Maruti",
+          color: "Silver",
+          driverType: driver.type.NORMAL,
+          vehicleType: vehicle.type.SMALL,
+          parkingTime: new Date(),
+        },
+        {
+          numberPlate: "",
+          company: "Mahindra",
+          color: "black",
+          driverType: driver.type.HANDICAP,
+          vehicleType: driver.type.SMALL,
+          parkingTime: new Date(),
+        },
+        {
+          numberPlate: "MH.05.ZA.3333",
+          company: "Tata",
+          color: "White",
+          driverType: driver.type.HANDICAP,
+          vehicleType: driver.type.SMALL,
+          parkingTime: new Date(),
+        },
+      ];
+      totalCars.forEach((car) => {
+        assert.isTrue(parkingLotSystem.park(car));
+      });
+      let searchParameter = {
+        numberPlate: "",
+      };
+      let parkCar = parkingLotSystem.checkVehicle(searchParameter);
+      assert.equal(parkCar[0].lot, 0);
+      assert.equal(parkCar[0].slot, 0);
+      assert.equal(parkCar[1].lot, 0);
+      assert.equal(parkCar[1].slot, 1);
     });
   });
 });
