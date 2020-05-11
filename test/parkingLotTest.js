@@ -295,6 +295,7 @@ describe(`Test the Parking Lot Position Availability`, () => {
     it(`given cars when find the car in parking lot in last 30 min should return car position`, () => {
       let date = new Date();
       let parkedTime = date.getMinutes() - 30;
+      let time = 30;
       let totalCars = [
         {
           numberPlate: "MH.05.AZ.7777",
@@ -320,7 +321,9 @@ describe(`Test the Parking Lot Position Availability`, () => {
       ];
       totalCars.forEach((car) => {
         assert.isTrue(parkingLotSystem.park(car));
-        let carParkedTime = parkingLotSystem.checkVehileParkedBeforeMinutes(30);
+        let carParkedTime = parkingLotSystem.checkVehileParkedBeforeMinutes(
+          time
+        );
         assert.equal(carParkedTime[0].lot, 0);
         assert.equal(carParkedTime[0].slot, 0);
       });
@@ -328,32 +331,73 @@ describe(`Test the Parking Lot Position Availability`, () => {
 
     //UC-16 Find the Vehicle Parked at Parking Lot According Vehicle and Driver Type
     it(`given cars when find the all handicap and small type cars should return car position`, () => {
+      parkingLotSystem = new ParkingLotSystem(3, 2, 6);
       let totalCars = [
         {
           numberPlate: "MH.05.AZ.7777",
           company: "Toyota",
           color: "White",
           driverType: driver.type.HANDICAP,
-          vehicleType: driver.type.SMALL,
+          vehicleType: vehicle.type.SMALL,
+          parkingTime: new Date(),
         },
         {
           numberPlate: "MH.05.AX.4545",
           company: "Toyota",
           color: "Blue",
           driverType: driver.type.NORMAL,
-          vehicleType: driver.type.LARGE,
+          vehicleType: vehicle.type.SMALL,
+          parkingTime: new Date(),
+        },
+        {
+          numberPlate: "MH.05.AX.5555",
+          company: "Maruti",
+          color: "Silver",
+          driverType: driver.type.NORMAL,
+          vehicleType: vehicle.type.SMALL,
+          parkingTime: new Date(),
+        },
+        {
+          numberPlate: "MH.05.ZA.3333",
+          company: "Mahindra",
+          color: "black",
+          driverType: driver.type.HANDICAP,
+          vehicleType: driver.type.SMALL,
+          parkingTime: new Date(),
+        },
+        {
+          numberPlate: "MH.05.ZA.3333",
+          company: "Tata",
+          color: "White",
+          driverType: driver.type.HANDICAP,
+          vehicleType: driver.type.SMALL,
+          parkingTime: new Date(),
+        },
+        {
+          numberPlate: "MH.05.ZA.1111",
+          company: "Toyota",
+          color: "black",
+          driverType: driver.type.HANDICAP,
+          vehicleType: driver.type.SMALL,
+          parkingTime: new Date(),
         },
       ];
       totalCars.forEach((car) => {
         assert.isTrue(parkingLotSystem.park(car));
-        searchParameter = {
-          driverType: driver.type.HANDICAP,
-          vehicleType: driver.type.SMALL,
-        };
-        let carParkedTime = parkingLotSystem.checkVehicle(searchParameter);
-        assert.equal(carParkedTime[0].lot, 0);
-        assert.equal(carParkedTime[0].slot, 0);
       });
+      searchParameter = {
+        driverType: "handicap",
+      };
+      let rows = [0, 2];
+      let parkedCar = parkingLotSystem.checkVehicle(searchParameter, rows);
+      console.log(parkedCar);
+
+      assert.equal(parkedCar[0].lot, 0);
+      assert.equal(parkedCar[0].slot, 0);
+      assert.equal(parkedCar[1].lot, 0);
+      assert.equal(parkedCar[1].slot, 1);
+      assert.equal(parkedCar[2].lot, 2);
+      assert.equal(parkedCar[2].slot, 1);
     });
   });
 });

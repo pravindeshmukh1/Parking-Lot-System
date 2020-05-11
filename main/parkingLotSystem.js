@@ -10,7 +10,7 @@ class ParkingLotSystem {
   }
 
   designParkingLot(lotNo, capacityOfEveryLot) {
-    this.parkingLot = [];
+    this.parkingLot = [lotNo];
     for (let lot = 0; lot < lotNo; lot++) {
       this.parkingLot[lot] = [capacityOfEveryLot];
       for (let slot = 0; slot < capacityOfEveryLot; slot++) {
@@ -22,8 +22,8 @@ class ParkingLotSystem {
   park = (vehicle) => {
     if (this.checkParkingLotFull() === false) {
       if (typeof vehicle === "object" && vehicle != null) {
-        if (vehicle.vehicleType == "large") this.checkEmptyLargeSlot(vehicle);
-        if (vehicle.dirverType == "handicap") {
+        if (vehicle.vehicleType === "large") this.checkEmptyLargeSlot(vehicle);
+        if (vehicle.dirverType === "handicap") {
           this.checkEmptySlotForHandicapDriver(vehicle);
         } else {
           this.checkEmptySlotForNormalDriver(vehicle);
@@ -38,7 +38,7 @@ class ParkingLotSystem {
 
   checkEmptySlotForNormalDriver = (vehicle) => {
     for (let lot = 0; lot < this.parkingLot.length; lot++) {
-      for (let slot = 0; slot < this.parkingLot[lot].length; slot++) {
+      for (let slot = 0; slot < this.parkingLot.length; slot++) {
         if (this.parkingLot[slot][lot] === null) {
           this.parkingLot[slot][lot] = vehicle;
           this.noOfVehicles++;
@@ -85,23 +85,60 @@ class ParkingLotSystem {
     return false;
   };
 
-  checkVehicle = (searchParameter) => {
+  checkVehicle = (searchParameter, rows) => {
+    if (Object.keys(searchParameter).length === 0) {
+      throw new Error("Please Enter correct information");
+    }
+    if (rows != undefined && rows.length != 0) {
+      return this.checkVehicleInSpecificRow(searchParameter, rows);
+    } else {
+      let vehicles = [];
+      let keys = Object.keys(searchParameter);
+      let values = Object.values(searchParameter);
+      for (let i = 0; i < keys.length; i++) {
+        for (let lot = 0; lot < this.parkingLot.length; lot++) {
+          for (let slot = 0; slot < this.parkingLot.length; slot++) {
+            if (this.parkingLot[lot][slot] != null) {
+              if (
+                this.parkingLot[lot][slot][keys[i]] === values[i] &&
+                this.parkingLot[lot][slot][keys[i + 1]] === values[i + 1]
+              ) {
+                let vehiclePosition = {
+                  lot: lot,
+                  slot: slot,
+                };
+                vehicles.push(vehiclePosition);
+              }
+            }
+          }
+        }
+      }
+      return vehicles;
+    }
+  };
+
+  checkVehicleInSpecificRow = (searchParameter, rows) => {
+    let noOfRows = rows.length;
     let vehicles = [];
     let keys = Object.keys(searchParameter);
     let values = Object.values(searchParameter);
-
-    for (let lot = 0; lot < this.parkingLot.length; lot++) {
-      for (let slot = 0; slot < this.parkingLot.length; slot++) {
-        if (this.parkingLot[lot][slot] != null) {
+    for (let i = 0; i < keys.length; i++) {
+      for (let lot = 0; lot < noOfRows; lot++) {
+        for (let slot = 0; slot < this.parkingLot[rows[lot]].length; slot++) {
           if (
-            this.parkingLot[lot][slot][keys[lot]] === values[lot] &&
-            this.parkingLot[lot][slot][keys[lot + 1]] === values[lot + 1]
+            this.parkingLot[rows[lot]][slot] != null &&
+            this.parkingLot[rows[lot]][slot] != undefined
           ) {
-            let vehiclePosition = {
-              lot: lot,
-              slot: slot,
-            };
-            vehicles.push(vehiclePosition);
+            if (
+              this.parkingLot[rows[lot]][slot][keys[i]] === values[i] &&
+              this.parkingLot[rows[lot]][slot][keys[i + 1]] === values[i + 1]
+            ) {
+              let vehiclePosition = {
+                lot: rows[lot],
+                slot: slot,
+              };
+              vehicles.push(vehiclePosition);
+            }
           }
         }
       }
@@ -110,7 +147,7 @@ class ParkingLotSystem {
   };
 
   checkVehileParkedBeforeMinutes = (minute) => {
-    this.vehicles = [];
+    let vehicles = [];
     let currentTimeInMinute = new Date().getMinutes();
     if (minute != undefined) {
       for (let lot = 0; lot < this.parkingLot.length; lot++) {
@@ -124,13 +161,13 @@ class ParkingLotSystem {
                 lot: lot,
                 slot: slot,
               };
-              this.vehicles.push(vehiclePosition);
+              vehicles.push(vehiclePosition);
             }
           }
         }
       }
     }
-    return this.vehicles;
+    return vehicles;
   };
 
   unparked = (vehicle) => {
